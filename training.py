@@ -45,13 +45,3 @@ for k in k_values:
     # Store the same model for all reg values for this k
     for reg in reg_values:
         benchmark_models[(k, reg)] = benchmark_model
-
-print("trained_models keys:", list(trained_models.keys()))
-print("benchmark_models keys:", list(benchmark_models.keys()))
-
-# Print a sample value from each dictionary
-sample_key = (k_values[0], reg_values[0])
-print("Sample trained_model for", sample_key, ":", trained_models[sample_key])
-print("Sample benchmark_model for", sample_key, ":", benchmark_models[sample_key])
-
-
