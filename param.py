@@ -1,10 +1,11 @@
+import numpy as np
 # Parameter definitions
-k_values = [0.1, 0.5, 0.9]  # Correlation parameter values
-reg_values = [0.01, 0.1, 1.0]  # Regularization strengths
+k_values =   np.linspace(0,1,8)# Correlation parameter values
+reg_values = np.linspace(0,100,10)  # Regularization strengths
 num_xz_samples = 100
-num_xy_samples = 200
+num_xy_samples = 2000
 random_seed = 42
-t = 20
-sample_run = 4
+t = 200
+sample_run = 20
 
 

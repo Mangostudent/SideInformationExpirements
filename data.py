@@ -37,10 +37,15 @@ class JointDistribution:
         if y not in [-1, 1] or z not in [-1, 1]:
             raise ValueError("y and z must be either +1 or -1")
             
-        # Mean depends on y and z
-        mean = y * z * self.k
-        # Let's keep variance fixed at 1 for simplicity
-        return norm(loc=mean, scale=1)
+        # Define four distinct cases
+        if y == 1 and z == 1:
+            return norm(loc=self.k, scale=1)
+        elif y == 1 and z == -1:
+            return norm(loc=-self.k, scale=1)
+        elif y == -1 and z == 1:
+            return norm(loc=-self.k, scale=1)
+        else:  # y == -1 and z == -1
+            return norm(loc=self.k, scale=1)
     
     def sample(self, size=1):
         """

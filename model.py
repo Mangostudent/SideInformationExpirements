@@ -39,8 +39,8 @@ class RegularizedLogisticRegressionModel:
         # Step 5: Define logistic loss + reg*|w_z|^2
         def loss_fn(w):
             logits = X_aug @ w
-            logistic_loss = np.mean(np.log1p(np.exp(-Y * logits)))  # More numerically stable
-            reg_term = self.reg * (w[-1] ** 2)  # Verify this matches paper's regularization
+            logistic_loss = np.mean(np.log1p(np.exp(-Y * logits)))  
+            reg_term = self.reg * (w[-1] ** 2)  
             return logistic_loss + reg_term
 
         # Step 6: Minimize the loss

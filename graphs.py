@@ -12,7 +12,7 @@ for k in k_values:
 # Plotting
 try:
     plt.figure(figsize=(10, 6))
-    plt.plot(list(least_reg_dict.keys()), list(least_reg_dict.values()), 
+    plt.scatter(list(least_reg_dict.keys()), list(least_reg_dict.values()), 
              marker='o', linestyle='--', color='b')
     plt.xlabel('k (Correlation Parameter)')
     plt.ylabel('Optimal Regularization Strength')
@@ -21,7 +21,4 @@ try:
     plt.show()
 except Exception as e:
     print(f"Error generating plot: {str(e)}")
-plt.xlabel('k')
-plt.ylabel('reg with least loss')
-plt.title('Best reg for each k')
-plt.show()
+
