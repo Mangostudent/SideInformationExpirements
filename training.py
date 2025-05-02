@@ -2,6 +2,7 @@ import numpy as np
 from data import JointDistribution
 from models import RegularizedLogisticRegressionModel
 import pandas as pd
+from sklearn.linear_model import LogisticRegression
 
 
 # --- Concrete training for a range of k and reg values ---
@@ -16,7 +17,10 @@ if random_seed is not None:
     np.random.seed(random_seed)
 
 trained_models = {}
+benchmark_models = {}
+
 for k in k_values:
+    # For each reg, fit the regularized model as before
     for reg in reg_values:
         total_samples = num_xz_samples + num_xy_samples
         dist = JointDistribution(k)
@@ -34,32 +38,20 @@ for k in k_values:
         model.fit()
         trained_models[(k, reg)] = model
 
-# Example: print weights for each (k, reg)
-for (k, reg), model in trained_models.items():
-    print(f"k={k}, reg={reg}: w={model.w}")
-
-# Display the weights as a 2D table (k as rows, reg as columns) using pandas
-weights_data = []
-for k in k_values:
-    row = []
+    # Fit the benchmark model (X, Z) -> Y using all data
+    XZ = np.column_stack([X, Z])
+    benchmark_model = LogisticRegression(fit_intercept=True, solver='lbfgs')
+    benchmark_model.fit(XZ, Y)
+    # Store the same model for all reg values for this k
     for reg in reg_values:
-        w = trained_models[(k, reg)].w
-        # If w is an array, flatten and take the first element for display
-        w_val = w.flatten()[0] if hasattr(w, 'flatten') else w
-        row.append(w_val)
-    weights_data.append(row)
+        benchmark_models[(k, reg)] = benchmark_model
 
-weights_df = pd.DataFrame(weights_data, index=k_values, columns=reg_values)
-print("\nWeights DataFrame (rows: k, columns: reg):")
-print(weights_df)
-print("Weights table (rows: k, columns: reg):")
-header = "k/reg\t" + "\t".join([str(reg) for reg in reg_values])
-print(header)
-for k in k_values:
-    row = [f"{k}"]
-    for reg in reg_values:
-        w = trained_models[(k, reg)].w
-        # If w is an array, flatten and convert to string
-        w_str = np.array2string(w.flatten(), precision=3, separator=',')
-        row.append(w_str)
-    print("\t".join(row))
+print("trained_models keys:", list(trained_models.keys()))
+print("benchmark_models keys:", list(benchmark_models.keys()))
+
+# Print a sample value from each dictionary
+sample_key = (k_values[0], reg_values[0])
+print("Sample trained_model for", sample_key, ":", trained_models[sample_key])
+print("Sample benchmark_model for", sample_key, ":", benchmark_models[sample_key])
+
+
