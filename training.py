@@ -1,6 +1,6 @@
 import numpy as np
 from data import JointDistribution
-from models import RegularizedLogisticRegressionModel
+from model import RegularizedLogisticRegressionModel
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 

@@ -1,6 +1,6 @@
 import numpy as np
 from data import JointDistribution
-from models import RegularizedLogisticRegressionModel
+from model import RegularizedLogisticRegressionModel
 from training import trained_models, benchmark_models  # assumes dictionaries are created at import
 
 def logistic_loss_pm1(y_true, y_pred_prob):
