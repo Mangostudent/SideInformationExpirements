@@ -59,11 +59,10 @@ class JointDistribution:
         
         # Sample Y,Z pairs according to joint distribution
         yz_samples = np.random.choice(len(yz_pairs), size=size, p=probs)
-        y_samples = np.array([yz_pairs[i][0] for i in yz_samples])
-        z_samples = np.array([yz_pairs[i][1] for i in yz_samples])
-        
-        # Then sample X conditioned on Y,Z
-        x_samples = np.zeros(size)
+        # Fix array conversion
+        y_samples = np.array([yz_pairs[i][0] for i in yz_samples], dtype=np.int8)
+        z_samples = np.array([yz_pairs[i][1] for i in yz_samples], dtype=np.int8)
+        x_samples = np.zeros(size, dtype=np.float32)
         for i in range(size):
             dist = self.conditional_x(y_samples[i], z_samples[i])
             x_samples[i] = dist.rvs()

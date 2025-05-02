@@ -2,8 +2,11 @@ import numpy as np
 from data import JointDistribution
 from model import RegularizedLogisticRegressionModel
 from training import trained_models, benchmark_models  # assumes dictionaries are created at import
+from param import t, sample_run, k_values, reg_values
 
 def logistic_loss_pm1(y_true, y_pred_prob):
+    # Convert Y from {0,1} to {-1,1} if needed
+    y_true = np.where(y_true == 0, -1, 1)
     # y_true in {-1, +1}, y_pred_prob is probability of y=+1
     # logistic loss: mean(log(1 + exp(-y * f(x))))
     # f(x) = logit = log(p/(1-p))
@@ -12,13 +15,6 @@ def logistic_loss_pm1(y_true, y_pred_prob):
     y_pred_prob = np.clip(y_pred_prob, eps, 1 - eps)
     logits = np.log(y_pred_prob / (1 - y_pred_prob))
     return np.mean(np.log(1 + np.exp(-y_true * logits)))
-
-# Set sample size for evaluation
-t = 1000  # or any value you want
-sample_run = 10  # set this to however many runs you want
-
-k_values = sorted(set(k for k, reg in trained_models.keys()))
-reg_values = sorted(set(reg for k, reg in trained_models.keys()))
 
 results = {}
 
@@ -36,6 +32,7 @@ for k in k_values:
             Y_pm = Y
 
             # Benchmark model: predict probabilities for logistic loss
+            # Changed from reg_values[0] to explicit first value
             bench_model = benchmark_models[(k, reg_values[0])]  # reg doesn't matter for benchmark
             bench_probs = bench_model.predict_proba(XZ)[:, 1]
             bench_loss = logistic_loss_pm1(Y_pm, bench_probs)
@@ -54,6 +51,3 @@ for k in k_values:
             diffs.append(trained_loss - bench_loss)
         results[(k, reg)] = np.mean(diffs)
 
-print("Mean difference in logistic loss (trained - benchmark) over all runs:")
-for key, value in results.items():
-    print(f"k={key[0]}, reg={key[1]}: {value:.4f}")
