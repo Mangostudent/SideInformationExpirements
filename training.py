@@ -11,7 +11,9 @@ trained_models = {}
 benchmark_models = {}
 
 for k in k_values:
+    print(f"Training models for k={k}...")
     for reg in reg_values:
+        print(f"  Training model for reg={reg}...")
         try:
             total_samples = num_xz_samples + num_xy_samples
             dist = JointDistribution(k)

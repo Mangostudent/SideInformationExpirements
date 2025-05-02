@@ -39,13 +39,13 @@ class JointDistribution:
             
         # Define four distinct cases
         if y == 1 and z == 1:
-            return norm(loc=self.k, scale=1)
+            return norm(loc=1.0 - self.k, scale=1)
         elif y == 1 and z == -1:
-            return norm(loc=-self.k, scale=1)
+            return norm(loc=1.0, scale=1)
         elif y == -1 and z == 1:
-            return norm(loc=-self.k, scale=1)
+            return norm(loc=0.0 + self.k, scale=1)
         else:  # y == -1 and z == -1
-            return norm(loc=self.k, scale=1)
+            return norm(loc=0.0, scale=1)
     
     def sample(self, size=1):
         """
