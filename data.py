@@ -70,7 +70,7 @@ class JointDistribution:
             
         return x_samples, y_samples, z_samples
 
-# Example test code
+# Example usage
 if __name__ == "__main__":
     # Initialize with k=0.5
     dist = JointDistribution(k=0.5)
