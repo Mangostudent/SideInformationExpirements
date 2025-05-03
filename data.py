@@ -60,24 +60,27 @@ class JointDistribution:
         Returns:
             tuple: (X_samples, Y_samples, Z_samples) each of length 'size'
         """
-        # First sample Y and Z
+        # First sample Y and Z based on their joint probability
         joint = self.joint_yz()
         yz_pairs = list(joint.keys())
         probs = list(joint.values())
         
-        # Sample Y,Z pairs according to joint distribution
-        yz_samples = np.random.choice(len(yz_pairs), size=size, p=probs)
-        # Fix array conversion
-        y_samples = np.array([yz_pairs[i][0] for i in yz_samples], dtype=np.int8)
-        z_samples = np.array([yz_pairs[i][1] for i in yz_samples], dtype=np.int8)
+        # Sample (Y, Z) pairs according to the joint distribution P(Y, Z)
+        yz_indices = np.random.choice(len(yz_pairs), size=size, p=probs)
+        y_samples = np.array([yz_pairs[i][0] for i in yz_indices], dtype=np.int8)
+        z_samples = np.array([yz_pairs[i][1] for i in yz_indices], dtype=np.int8)
+        
+        # Sample X based on the conditional distribution P(X | Y, Z)
         x_samples = np.zeros(size, dtype=np.float32)
         for i in range(size):
+            # Get the conditional distribution P(X | Y=y_i, Z=z_i)
             dist = self.conditional_x(y_samples[i], z_samples[i])
+            # Sample X from this conditional distribution
             x_samples[i] = dist.rvs()
             
         return x_samples, y_samples, z_samples
 
-# Example usage
+# Example usage demonstrating class functionality
 if __name__ == "__main__":
     # Initialize with k=0.5
     dist = JointDistribution(k=0.5)
