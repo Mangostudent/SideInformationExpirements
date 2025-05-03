@@ -1,7 +1,7 @@
 import numpy as np
 from data import JointDistribution
 from training import trained_models, benchmark_models  # assumes dictionaries are created at import
-from param import t, sample_run, k_values, reg_values
+from param import t, sample_run, k_values, reg_values, min_reg
 risk = {}
 upperbound = {}
 
@@ -36,7 +36,7 @@ for k in k_values:
             trained_loss = np.mean(np.log(1 + np.exp(-Y * logits)))
 
             # Assuming comparison with lower benchmark model
-            diffs.append(trained_loss - lower_bench_loss)
+            diffs.append(trained_loss - Rwstar)
 
             # Trained intermediate model X -> Z
             intermediate_trained_model = trained_models[(k, reg)].intermediate_model
@@ -45,10 +45,10 @@ for k in k_values:
 
             #w^*, w_reg^*, w_{phi^*,reg}^*
             wstar = np.hstack([lower_bench_model.intercept_, lower_bench_model.coef_.flatten()])
-            wregstar = trained_models[(k, min_reg)].w
-            wphistarstar = benchmark_models[(k, min_reg)][-1].w
+            wphistarstar = trained_models[(k, min_reg)].w
+            wregstar = benchmark_models[(k, reg)][-1].w
 
-            expr.append(np.min(reg*(wstar[-1])**2, Lvstar - Rwstar + reg*(wphistarstar[-1])**2) + np.min(np.log(2)/reg,np.max(np.linalg.norm(wregstar),np.linalg.norm(wstar)))*Rustar)
+            expr.append(min(reg*(wstar[-1])**2, Lvstar - Rwstar + reg*(wphistarstar[-1])**2) + min(np.log(2)/reg, max(np.linalg.norm(wregstar), np.linalg.norm(wstar)))*Rustar)
 
         risk[(k, reg)] = np.mean(diffs)
         upperbound[(k, reg)] = np.mean(expr)
