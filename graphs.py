@@ -79,27 +79,41 @@ try:
     plt.legend()
     plt.show()
 
-    # Plot 3: Frequency of Optimal Regularization Strengths (Risk)
-    # Shows how many times each regularization value was found to be optimal for minimizing risk.
+    # Combined Plot 3 & 4: Frequency of Optimal Regularization Strengths
+    # Shows how many times each regularization value was found to be optimal for minimizing risk and upperbound.
     plt.figure(figsize=(10, 6))
-    plt.scatter(list(frequency_risk.keys()), list(frequency_risk.values()), marker='o', color='b')
+    plt.scatter(list(frequency_risk.keys()), list(frequency_risk.values()), marker='o', color='b', label='Risk Frequency')
+    plt.scatter(list(frequency_upperbound.keys()), list(frequency_upperbound.values()), marker='x', color='r', label='Upperbound Frequency') # Use different marker/color
     plt.xlabel('Regularization Strength (log scale)')
     plt.ylabel('Frequency (Count)')
-    plt.title('Frequency of Optimal Regularization Strengths (Risk)')
+    plt.title('Frequency of Optimal Regularization Strengths (Risk & Upperbound)')
     plt.xscale('log') # Use log scale for potentially wide range of reg values
     plt.grid(True)
+    plt.legend() # Add legend to distinguish the plots
     plt.show()
 
-    # Plot 4: Frequency of Optimal Regularization Strengths (Upperbound)
-    # Shows how many times each regularization value was found to be optimal for minimizing the upperbound.
-    plt.figure(figsize=(10, 6))
-    plt.scatter(list(frequency_upperbound.keys()), list(frequency_upperbound.values()), marker='o', color='r')
-    plt.xlabel('Regularization Strength (log scale)')
-    plt.ylabel('Frequency (Count)')
-    plt.title('Frequency of Optimal Regularization Strengths (Upperbound)')
-    plt.xscale('log') # Use log scale for potentially wide range of reg values
-    plt.grid(True)
-    plt.show()
+    # --- Removed original Plot 3 and Plot 4 ---
+    # # Plot 3: Frequency of Optimal Regularization Strengths (Risk)
+    # # Shows how many times each regularization value was found to be optimal for minimizing risk.
+    # plt.figure(figsize=(10, 6))
+    # plt.scatter(list(frequency_risk.keys()), list(frequency_risk.values()), marker='o', color='b')
+    # plt.xlabel('Regularization Strength (log scale)')
+    # plt.ylabel('Frequency (Count)')
+    # plt.title('Frequency of Optimal Regularization Strengths (Risk)')
+    # plt.xscale('log') # Use log scale for potentially wide range of reg values
+    # plt.grid(True)
+    # plt.show()
+    #
+    # # Plot 4: Frequency of Optimal Regularization Strengths (Upperbound)
+    # # Shows how many times each regularization value was found to be optimal for minimizing the upperbound.
+    # plt.figure(figsize=(10, 6))
+    # plt.scatter(list(frequency_upperbound.keys()), list(frequency_upperbound.values()), marker='o', color='r')
+    # plt.xlabel('Regularization Strength (log scale)')
+    # plt.ylabel('Frequency (Count)')
+    # plt.title('Frequency of Optimal Regularization Strengths (Upperbound)')
+    # plt.xscale('log') # Use log scale for potentially wide range of reg values
+    # plt.grid(True)
+    # plt.show()
 
 except KeyError as e:
     print(f"Error generating plot: Missing key {e}. Check if risk/upperbound dictionaries cover all k/reg combinations.")
