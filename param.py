@@ -16,7 +16,7 @@ reg_values = np.concatenate([
 num_xz_samples = 200    # Number of samples (X, Z) for training the intermediate model X -> Z
 num_xy_samples = 2700   # Number of samples (X, Y) for training the final model (X, Z_pred) -> Y
 t = 100                 # Number of samples used in each evaluation run within eval.py
-sample_run = 8          # Number of independent evaluation runs in eval.py
+sample_run = 4          # Number of independent evaluation runs in eval.py
 
 # --- Reproducibility ---
 random_seed = 42        # Seed for numpy's random number generator for reproducibility
