@@ -46,29 +46,31 @@ class RegularizedLogisticRegressionModel:
         # Step 6: Minimize the loss
         res = minimize(loss_fn, w0, method='BFGS')
         self.w = res.x
-        return {
-            'model': self,
-            'intermediate_model': clf,
-            'w': self.w,
-            'u': (u_c, u_x)
-        }
 
-    def predict(self, X, Z):
-        if self.w is None:
-            raise ValueError("Model must be fit before prediction")
-        """
-        Predict Y from X and Z using the learned model.
-        X: shape (n_samples, n_features)
-        Z: shape (n_samples,) or (n_samples, 1)
-        Returns: +1/-1 labels
-        """
-        n_samples = X.shape[0]
-        if Z.ndim == 1:
-            Z = Z.reshape(-1, 1)
-        X_aug = np.hstack([np.ones((n_samples, 1)), X, Z])
-        logits = X_aug @ self.w
-        proba = 1 / (1 + np.exp(-logits))
-        return np.where(proba >= 0.5, 1, -1)
+class RegularizedLogisticRegressionModelFullInformation:
+    def __init__(self, reg, sample):
+        assert reg >= 0, "Regularization value must be non-negative"
+        self.reg = reg
+        self.X, self.Y, self.Z = sample
+        self.w = None
+
+    def fit(self):
+        n_samples = self.X.shape[0]
+        if self.Z.ndim == 1:
+            self.Z = self.Z.reshape(-1, 1)
+        X_aug = np.hstack([np.ones((n_samples, 1)), self.X, self.Z])
+        n_features = X_aug.shape[1]
+        w0 = np.zeros(n_features)
+
+        def loss_fn(w):
+            logits = X_aug @ w
+            logistic_loss = np.mean(np.log1p(np.exp(-self.Y * logits)))
+            reg_term = self.reg * (w[-1] ** 2)
+            return logistic_loss + reg_term
+
+        res = minimize(loss_fn, w0, method='BFGS')
+        self.w = res.x
+        return self.w
 
 # Example usage
 if __name__ == "__main__":
@@ -93,3 +95,9 @@ if __name__ == "__main__":
     preds = model.predict(X_xy, Z_pred_test)
     print("Predictions:", preds[:10])
     print("True labels:", Y[:10])
+
+    # Test RegularizedLogisticRegressionModelFullInformation
+    sample = (X_xy, Y, Z_pred_test)
+    model_full_info = RegularizedLogisticRegressionModelFullInformation(reg, sample)
+    w_full_info = model_full_info.fit()
+    print("Learned weights w (full information):", w_full_info)

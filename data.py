@@ -24,6 +24,7 @@ class JointDistribution:
             (-1, 1): (1 - self.k)/4,
             (-1, -1): (1 + self.k)/4
         }
+       
     
     def conditional_x(self, y, z):
         """
@@ -37,15 +38,17 @@ class JointDistribution:
         if y not in [-1, 1] or z not in [-1, 1]:
             raise ValueError("y and z must be either +1 or -1")
             
-        # Define four distinct cases
+        #Define four distinct cases
         if y == 1 and z == 1:
             return norm(loc=1.0 - self.k, scale=1)
         elif y == 1 and z == -1:
             return norm(loc=1.0, scale=1)
         elif y == -1 and z == 1:
-            return norm(loc=0.0 + self.k, scale=1)
-        else:  # y == -1 and z == -1
             return norm(loc=0.0, scale=1)
+        else:  # y == -1 and z == -1
+            return norm(loc=0.0 + self.k, scale=1)
+
+ 
     
     def sample(self, size=1):
         """
