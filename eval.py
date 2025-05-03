@@ -10,8 +10,8 @@ risk = {}       # Stores average difference: trained_loss - lower_benchmark_loss
 upperbound = {} # Stores average calculated upper bound value
 
 # Loop over correlation parameters 'k'
-for k in k_values:
-    print(f"Evaluating for k={k}...")
+for i, k in enumerate(k_values):
+    print(f"Evaluating... Progress: {((i + 1) / len(k_values) * 100):.2f}% (k={k})")
     
     # Loop over regularization strengths 'reg'
     for reg in reg_values:

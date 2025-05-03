@@ -14,8 +14,8 @@ trained_models = {}     # Stores RegularizedLogisticRegressionModel instances: {
 benchmark_models = {}   # Stores benchmark models: {(k, reg): [lower_bench, upper_bench, reg_bench]}
 
 # Loop over different correlation parameters 'k'
-for k in k_values:
-    print(f"Training models for k={k}...")
+for i, k in enumerate(k_values):
+    print(f"Training models... Progress: {((i + 1) / len(k_values) * 100):.2f}% (k={k})")
     
     # Generate a combined dataset for this k
     total_samples = num_xz_samples + num_xy_samples
