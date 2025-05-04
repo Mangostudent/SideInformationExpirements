@@ -86,7 +86,7 @@ frequency_upperbound = Counter(min_reg_values_upperbound) # Counter efficiently 
 
 # --- Plotting (Reordered and Saving to Files) ---
 try:
-    # --- Plot 2: Minimum Risk/Upperbound Value vs. k ---
+    # --- Plot 1: Minimum Risk/Upperbound Value vs. k ---
     # Shows the actual minimum risk/upperbound value achieved for each k, using its corresponding optimal regularization.
     plt.figure(figsize=(10, 6))
     # Plot minimum risk values found for each k
@@ -98,12 +98,12 @@ try:
     plt.title('Minimum Achieved Risk/Upperbound vs. Correlation Parameter (k)')
     plt.grid(True)
     plt.legend()
-    plot2_filename = os.path.join(output_dir, "plot2_min_value_vs_k.png")
-    plt.savefig(plot2_filename) # Save the plot to a file
-    print(f"Plot 2 saved to: {plot2_filename}")
+    plot1_filename = os.path.join(output_dir, "plot1_min_value_vs_k.png")
+    plt.savefig(plot1_filename) # Save the plot to a file
+    print(f"Plot 1 saved to: {plot1_filename}")
     plt.close() # Close the figure to free memory
 
-    # --- Combined Plot 3: Frequency of Optimal Regularization Strengths ---
+    # --- Combined Plot 2: Frequency of Optimal Regularization Strengths ---
     # Shows how many times each regularization value was found to be optimal across all k values.
     plt.figure(figsize=(10, 6))
     # Plot frequency counts for optimal 'reg' in risk minimization
@@ -116,9 +116,9 @@ try:
     plt.xscale('log') # Use log scale for x-axis as 'reg' values might span orders of magnitude
     plt.grid(True)
     plt.legend() # Add legend to distinguish risk and upperbound frequencies
-    plot3_filename = os.path.join(output_dir, "plot3_frequency.png")
-    plt.savefig(plot3_filename) # Save the plot to a file
-    print(f"Plot 3 saved to: {plot3_filename}")
+    plot2_filename = os.path.join(output_dir, "plot2_frequency.png")
+    plt.savefig(plot2_filename) # Save the plot to a file
+    print(f"Plot 2 saved to: {plot2_filename}")
     plt.close() # Close the figure
 
     # --- Plot 1: Optimal Regularization vs. k ---
@@ -134,9 +134,9 @@ try:
     plt.yscale('log') # Use log scale for y-axis as 'reg' values might span orders of magnitude
     plt.grid(True)
     plt.legend()
-    plot1_filename = os.path.join(output_dir, "plot1_optimal_reg_vs_k.png")
-    plt.savefig(plot1_filename) # Save the plot to a file
-    print(f"Plot 1 saved to: {plot1_filename}")
+    plot3_filename = os.path.join(output_dir, "plot3_optimal_reg_vs_k.png")
+    plt.savefig(plot3_filename) # Save the plot to a file
+    print(f"Plot 3 saved to: {plot3_filename}")
     plt.close() # Close the figure
 
     # --- Removed original separate frequency plots (Plot 3 and Plot 4) ---
